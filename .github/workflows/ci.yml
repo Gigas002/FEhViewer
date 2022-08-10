@@ -38,14 +38,15 @@ jobs:
           mv lib/config/config.dart.sample lib/config/config.dart
       - name: Prepare
         run: |
+          cd scripts/
           export scripts_path=`pwd`
           export release_bundle_identifier='cn.honjow.fehv'
           export dev_bundle_identifier='dev2.cn.honjow.fehv'
           export pub_output_path="$HOME/Public/fehv";
-          export ipa_plist_path="${ios_archiver_path}/Info.plist"
           export apk_build_path="${scripts_path}/../build/app/outputs/apk/release/";
           export apk_build_path_universal="${scripts_path}/../build/app/outputs/apk/releaseUniversal/";
           export version=`perl version.pl`
+          cd ../
       # - name: What is this
       #   run: |
       #     fvm flutter pub upgrade
@@ -91,6 +92,7 @@ jobs:
           mv lib/config/config.dart.sample lib/config/config.dart
       - name: Prepare
         run: |
+          cd scripts/
           export scripts_path=`pwd`
           export release_bundle_identifier='cn.honjow.fehv'
           export dev_bundle_identifier='dev2.cn.honjow.fehv'
@@ -100,7 +102,9 @@ jobs:
           export ipa_plist_path="${ios_archiver_path}/Info.plist"
           export version=`perl version.pl`
 
-          cd $scripts_path/../ios && pod update && pod install && cd $scripts_path
+          cd ../ios/
+          pod update
+          pod install
       - name: Build
         run: |
           flutter build ipa --release --no-codesign && sh reid.sh && sh zip.sh $version && sh dsym.sh

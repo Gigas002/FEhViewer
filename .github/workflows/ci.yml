@@ -46,10 +46,16 @@ jobs:
           pod install
       - name: Build
         run: |
+          echo $pwd
           flutter build ipa --release --no-codesign
-          sh ${scripts_path}/reid.sh
-          sh ${scripts_path}/zip.sh $version
-          sh ${scripts_path}/dsym.sh
+          echo "build complete"
+          sh scripts/reid.sh
+          echo "reid complete"
+          sh scripts/zip.sh $version
+          echo "zip complete"
+          sh scripts/dsym.sh
+          echo "dsym complete"
+
       # - name: Upload a Build Artifact
       #   uses: actions/upload-artifact@v3.1.0
       #   with:

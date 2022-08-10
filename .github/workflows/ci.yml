@@ -103,6 +103,8 @@ jobs:
           export version=`perl version.pl`
 
           cd ../ios/
+          flutter clean
+          flutter pub get
           pod update
           pod install
       - name: Build

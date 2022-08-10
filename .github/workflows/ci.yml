@@ -43,10 +43,23 @@ jobs:
           mv lib/config/config.dart.sample lib/config/config.dart
       - name: Prepare
         run: |
-          scripts/fvm_apk.sh
+          export scripts_path=`pwd`
+          export release_bundle_identifier='cn.honjow.fehv'
+          export dev_bundle_identifier='dev2.cn.honjow.fehv'
+          export pub_output_path="$HOME/Public/fehv";
+          export ipa_plist_path="${ios_archiver_path}/Info.plist"
+          export apk_build_path="${scripts_path}/../build/app/outputs/apk/release/";
+          export apk_build_path_universal="${scripts_path}/../build/app/outputs/apk/releaseUniversal/";
+          export version=`perl version.pl`
       - name: Build
         run: |
-          scripts/build_apk.sh
+          echo $apk_build_path
+          echo $apk_build_path_universal
+
+          flutter build apk
+          cp -R $apk_build_path $apk_build_path_universal
+          flutter build apk --split-per-abi
+          cp $apk_build_path_universal/*.apk $apk_build_path/*
     # - name: Upload a Build Artifact
     #   uses: actions/upload-artifact@v3.1.0
     #   with:

@@ -52,15 +52,6 @@ jobs:
           export apk_build_path="${scripts_path}/../build/app/outputs/apk/release/";
           export apk_build_path_universal="${scripts_path}/../build/app/outputs/apk/releaseUniversal/";
           export version=`perl version.pl`
-
-          echo $apk_build_path
-          echo $apk_build_path_universal
-
-          fvm flutter pub upgrade
-          fvm flutter build apk
-          cp -R $apk_build_path $apk_build_path_universal
-          fvm flutter build apk --split-per-abi
-          cp $apk_build_path_universal/*.apk $apk_build_path/*
       - name: Build
         run: |
           echo $apk_build_path

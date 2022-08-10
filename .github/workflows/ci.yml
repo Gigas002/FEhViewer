@@ -17,7 +17,7 @@ jobs:
         uses: actions/setup-java@v3.4.1
         with:
           # The Java version to set up. Takes a whole or semver Java version. See examples of supported syntax in README file
-          java-version: "17.x"
+          java-version: "16.x"
           # Java distribution. See the list of supported distributions in README file
           distribution: temurin
           cache: gradle # optional
@@ -31,12 +31,6 @@ jobs:
         #flutter-version: # optional, default is any
         # The Flutter build release channel
         #channel: # optional, default is stable
-
-      - name: Setup Python
-        uses: actions/setup-python@v4.2.0
-        with:
-          # Version range or exact version of Python or PyPy to use, using SemVer's version range syntax. Reads from .python-version if unset.
-          python-version: "3.10" # optional
 
       - name: Preprocess
         run: |

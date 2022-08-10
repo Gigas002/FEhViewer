@@ -96,7 +96,6 @@ jobs:
         run: |
           flutter build macos --release
 
-        # TODO: test this
           echo "macos build ended"
           sh scripts/dmg.sh $version
         
@@ -131,7 +130,6 @@ jobs:
         run: |
           flutter build windows --release
 
-        # TODO: test this
           echo "windows build ended"
           sh scripts/win_comp.bat
         
@@ -187,11 +185,11 @@ jobs:
           echo $apk_build_path
           echo $apk_build_path_universal
 
-        # TODO: make at least this work
           flutter build apk
-        #  cp -R $apk_build_path $apk_build_path_universal
-        #  flutter build apk --split-per-abi
-        #  cp $apk_build_path_universal/*.apk $apk_build_path/*
+
+      #  cp -R $apk_build_path $apk_build_path_universal
+      #  flutter build apk --split-per-abi
+      #  cp $apk_build_path_universal/*.apk $apk_build_path/*
 
       # Example of artifact deployment
       # - name: Upload a Build Artifact

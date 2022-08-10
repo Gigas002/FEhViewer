@@ -46,13 +46,13 @@ jobs:
           export apk_build_path="${scripts_path}/../build/app/outputs/apk/release/";
           export apk_build_path_universal="${scripts_path}/../build/app/outputs/apk/releaseUniversal/";
           export version=`perl version.pl`
-      - name: What is this
-        run: |
-          fvm flutter pub upgrade
-          fvm flutter build apk
-          cp -R $apk_build_path $apk_build_path_universal
-          fvm flutter build apk --split-per-abi
-          cp $apk_build_path_universal/*.apk $apk_build_path/*
+      # - name: What is this
+      #   run: |
+      #     fvm flutter pub upgrade
+      #     fvm flutter build apk
+      #     cp -R $apk_build_path $apk_build_path_universal
+      #     fvm flutter build apk --split-per-abi
+      #     cp $apk_build_path_universal/*.apk $apk_build_path/*
       - name: Build
         run: |
           echo $apk_build_path
@@ -62,10 +62,52 @@ jobs:
           cp -R $apk_build_path $apk_build_path_universal
           flutter build apk --split-per-abi
           cp $apk_build_path_universal/*.apk $apk_build_path/*
-    # - name: Upload a Build Artifact
-    #   uses: actions/upload-artifact@v3.1.0
-    #   with:
-    #     # Artifact name
-    #     name: # optional, default is artifact
-    #     # A file, directory or wildcard pattern that describes what to upload
-    #     path:
+      # - name: Upload a Build Artifact
+      #   uses: actions/upload-artifact@v3.1.0
+      #   with:
+      #     # Artifact name
+      #     name: # optional, default is artifact
+      #     # A file, directory or wildcard pattern that describes what to upload
+      #     path:
+  build-ios:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Flutter action
+        # You may pin to the exact commit or the version.
+        # uses: subosito/flutter-action@6c2e035f2692eeac890d854df95630c72673f130
+        uses: subosito/flutter-action@v2.6.1
+        #with:
+        # The Flutter version to make available on the path
+        #flutter-version: # optional, default is any
+        # The Flutter build release channel
+        #channel: # optional, default is stable
+
+      - name: Preprocess
+        run: |
+          rm lib/config/config.dart
+          mv lib/config/config.dart.sample lib/config/config.dart
+      - name: Prepare
+        run: |
+          export scripts_path=`pwd`
+          export release_bundle_identifier='cn.honjow.fehv'
+          export dev_bundle_identifier='dev2.cn.honjow.fehv'
+          export pub_output_path="$HOME/Public/fehv";
+          export macos_archiver_path="${scripts_path}/../build/macos/Build/Products/Release/fehviewer.app";
+          export ios_archiver_path="${scripts_path}/../build/ios/archive/fehviewer.xcarchive/Products/Applications/FEhViewer.app"
+          export ipa_plist_path="${ios_archiver_path}/Info.plist"
+          export version=`perl version.pl`
+
+          cd $scripts_path/../ios && pod update && pod install && cd $scripts_path
+      - name: Build
+        run: |
+          flutter build ipa --release --no-codesign && sh reid.sh && sh zip.sh $version && sh dsym.sh
+      # - name: Upload a Build Artifact
+      #   uses: actions/upload-artifact@v3.1.0
+      #   with:
+      #     # Artifact name
+      #     name: # optional, default is artifact
+      #     # A file, directory or wildcard pattern that describes what to upload
+      #     path:

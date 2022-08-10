@@ -94,9 +94,10 @@ jobs:
           pod install
       - name: Build
         run: |
+          export version=`perl scripts/version.pl`
+
           flutter build macos --release
 
-          echo "macos build ended"
           sh scripts/dmg.sh $version
         
       # Example of artifact deployment
@@ -182,6 +183,9 @@ jobs:
           cd ../
       - name: Build
         run: |
+          export apk_build_path="scripts/../build/app/outputs/apk/release/";
+          export apk_build_path_universal="scripts/../build/app/outputs/apk/releaseUniversal/";
+
           echo $apk_build_path
           echo $apk_build_path_universal
 

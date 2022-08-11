@@ -24,6 +24,7 @@ jobs:
           rm lib/config/config.dart
           mv lib/config/config.dart.sample lib/config/config.dart
 
+          cd ios/
           flutter clean
           flutter pub get
           pod update
@@ -62,6 +63,7 @@ jobs:
           rm lib/config/config.dart
           mv lib/config/config.dart.sample lib/config/config.dart
 
+          cd macos/
           flutter clean
           flutter pub get
           pod update

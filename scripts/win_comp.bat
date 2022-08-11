@@ -1,16 +1,8 @@
-@echo off
-
-set DestDir=build\windows\runner\fehviewer
 set SrcDir=build\windows\runner\Release
+set DestDir=bin\windows\fehviewer
 
-if exist %DestDir%\ (
-    echo %DestDir% exist
-    del /f /q %DestDir%
-) else (
-    echo mkdir %DestDir%
-    md %DestDir%
-)
-::rd /s /q %DestDir%
+del /f /q %DestDir%
+mkdir %DestDir%
 
 xcopy /e /h /q /y %SrcDir% %DestDir%
-xcopy /y windows\*.dll %SrcDir%\*
+xcopy /y windows\sqlite3.dll %SrcDir%\sqlite3.dll

@@ -7,7 +7,7 @@ on:
     branches: ["ci-test"]
 
 jobs:
-  ios-build-only:
+  ios-build:
     runs-on: macos-latest
 
     steps:
@@ -24,17 +24,13 @@ jobs:
           rm lib/config/config.dart
           mv lib/config/config.dart.sample lib/config/config.dart
 
-          cd ios/
-
           flutter clean
           flutter pub get
           pod update
           pod install
       - name: Build
         run: |
-          cd scripts/
-          sh para.sh
-          cd ../
+          cd scripts/ && source para.sh && cd ../
 
           flutter build ipa --release --no-codesign
 
@@ -52,7 +48,7 @@ jobs:
       #     name: 'ios' # optional, default is artifact
       #     # A file, directory or wildcard pattern that describes what to upload
       #     path: 'build/Payload.ipa'
-  macos-build-only:
+  macos-build:
     runs-on: macos-latest
 
     steps:
@@ -66,23 +62,18 @@ jobs:
           rm lib/config/config.dart
           mv lib/config/config.dart.sample lib/config/config.dart
 
-          cd macos/
-
           flutter clean
           flutter pub get
           pod update
           pod install
       - name: Build
         run: |
-          cd scripts/
-          sh para.sh
-          cd ../
+          cd scripts/ && source para.sh && cd ../
 
           flutter build macos --release
-
           sh scripts/dmg.sh $version
 
-          7z a build/macos.zip build/*
+          sh scripts/pack_macos.sh
         
       # Deploy artifacts
       - name: Upload a Build Artifact
@@ -92,7 +83,7 @@ jobs:
           name: 'macos' # optional, default is artifact
           # A file, directory or wildcard pattern that describes what to upload
           path: 'build/macos.zip'
-  windows-build-only:
+  windows-build:
     runs-on: windows-latest
 
     steps:
@@ -107,10 +98,8 @@ jobs:
           mv lib/config/config.dart.sample lib/config/config.dart
       - name: Build
         run: |
-          flutter build windows --release
-
-          scripts/win_comp.bat
-          cd bin/windows/ && 7z a ../windows.zip fehviewer/*
+          scripts/build_win.bat
+          scripts/pack_win.bat
         
       # Deploy artifacts
       - name: Upload a Build Artifact
@@ -120,7 +109,7 @@ jobs:
           name: 'windows' # optional, default is artifact
           # A file, directory or wildcard pattern that describes what to upload
           path: 'build/windows.zip'
-  android-build-only:
+  android-build:
     runs-on: ubuntu-latest
 
     steps:
@@ -144,9 +133,7 @@ jobs:
           mv lib/config/config.dart.sample lib/config/config.dart
       - name: Build
         run: |
-          cd scripts/
-          sh para.sh
-          cd ../
+          cd scripts/ && source para.sh && cd ../
 
           flutter build apk
       #  cp -R $apk_build_path $apk_build_path_universal
@@ -176,8 +163,6 @@ jobs:
           mv lib/config/config.dart.sample lib/config/config.dart
       - name: Test
         run: |
-          cd scripts/
-          sh para.sh
-          cd ../
+          cd scripts/ && source para.sh && cd ../
 
           flutter test

@@ -20,21 +20,21 @@ macos_temp_dir="macos_temp"
 macos_temp_file_name="feh_$version"
 macos_temp_path="${macos_build_path}/$macos_temp_dir";
 
-version_dir="$macos_build_path/macos_$version";
+bin_dir="$macos_build_path/fehviewer";
 
 temp_file_path="$macos_temp_path/$macos_temp_file_name"
 
 echo $macos_temp_path
-echo $version_dir
+echo $bin_dir
 
 rm -rf $macos_temp_path
 mkdir $macos_temp_path
 
-rm -rf $version_dir
-mkdir $version_dir
+rm -rf $bin_dir
+mkdir $bin_dir
 
 cp -a $macos_archiver_path $macos_temp_path
 
-cd $version_dir || exit
-echo "cd $version_dir"
+cd $bin_dir || exit
+echo "cd $bin_dir"
 dmg $macos_temp_path "fehviewer" $macos_temp_file_name

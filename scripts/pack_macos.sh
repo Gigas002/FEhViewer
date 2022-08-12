@@ -1,2 +1,2 @@
 # Pack release
-7z a build/macos.zip build/*
+cd build/macos/ && 7z a ../macos.zip fehviewer/*

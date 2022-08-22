@@ -13,33 +13,33 @@ jobs:
     steps:
       - uses: actions/checkout@v3.0.2
 
-      # - name: Install flutter
-      #   uses: subosito/flutter-action@v2.6.1
-      #   with:
-      #   # Beta is required for --no-codesign on iOS build to work properly. Can be commented after flutter 3.1.0 release
-      #     channel: beta # optional, default is stable
+      - name: Install flutter
+        uses: subosito/flutter-action@v2.6.1
+        with:
+        # Beta is required for --no-codesign on iOS build to work properly. Can be commented after flutter 3.1.0 release, see https://github.com/flutter/flutter/issues/101765
+          channel: master # optional, default is stable
 
-      # - name: Prepare
-      #   run: |
-      #     rm lib/config/config.dart
-      #     mv lib/config/config.dart.sample lib/config/config.dart
+      - name: Prepare
+        run: |
+          rm lib/config/config.dart
+          mv lib/config/config.dart.sample lib/config/config.dart
 
-      #     cd ios/
-      #     flutter clean
-      #     flutter pub get
-      #     pod update
-      #     pod install
-      # - name: Build
-      #   run: |
-      #     cd scripts/ && source para.sh && cd ../
+          cd ios/
+          flutter clean
+          flutter pub get
+          pod update
+          pod install
+      - name: Build
+        run: |
+          cd scripts/ && source para.sh && cd ../
 
-      #     flutter build ipa --release --no-codesign
+          flutter build ipa --release --no-codesign
 
         # Following commands fails to execute, so unable to deploy through CI. Fixable?
 
-        #  sh scripts/reid.sh
-        #  sh scripts/zip.sh $version
-        #  sh scripts/dsym.sh
+          sh scripts/reid.sh
+          sh scripts/zip.sh $version
+          sh scripts/dsym.sh
         
       # Deploy artifacts
       # - name: Upload a Build Artifact

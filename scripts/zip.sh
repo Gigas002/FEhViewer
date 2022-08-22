@@ -8,11 +8,13 @@ then
     exit
 fi
 
-ipa_name="feh_$version.ipa"
-ipa_temp_dir="$pub_output_path/temp";
-ipa_payload_dir="$pub_output_path/temp/Payload";
+export ios_build_path="${scripts_path}/../build/ios"
 
-output_version_dir="$pub_output_path/$version";
+ipa_name="feh_$version.ipa"
+ipa_temp_dir="$ios_build_path/temp";
+ipa_payload_dir="$ios_build_path/temp/Payload";
+
+output_version_dir="$ios_build_path/$version";
 
 ipa_path="$ipa_temp_dir/$ipa_name"
 

@@ -1,9 +1,8 @@
-#!/bin/zsh
-source ./para.sh
+#!/bin/sh
 
-echo $apk_build_path
-echo $apk_build_path_universal
-
+source para.sh
+apk_build_path="$scripts_path/../build/app/outputs/apk/release/";
+apk_build_path_universal="$scripts_path/../build/app/outputs/apk/releaseUniversal/";
 
 #flutter build apk --target-platform android-arm,android-arm64,android-x64 --split-per-abi
 flutter build apk

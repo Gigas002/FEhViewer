@@ -1,4 +1,7 @@
+@echo off
+
 @REM Pack release
+
 set SrcDir=build\windows\runner\Release
 set DestDir=build\windows\fehviewer
 

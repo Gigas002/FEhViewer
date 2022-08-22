@@ -6,6 +6,7 @@ ipa_plist_path="$ios_archiver_path/Info.plist"
 release_bundle_identifier='cn.honjow.fehv'
 ios_build_path="$scripts_path/../build/ios"
 
+echo $version
 if [ $version -eq 0 ];
 then
     echo "version empty"
@@ -20,7 +21,8 @@ plist_key="CFBundleIdentifier"
 
 # zip.sh
 
-ipa_name="feh_$version.ipa"
+# TODO: $version
+ipa_name="feh_$1.ipa"
 ipa_temp_dir="$ios_build_path/temp";
 ipa_payload_dir="$ios_build_path/temp/Payload";
 

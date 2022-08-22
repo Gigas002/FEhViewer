@@ -25,21 +25,12 @@ jobs:
           mv lib/config/config.dart.sample lib/config/config.dart
 
           cd ios/
-          flutter clean
-          flutter pub get
-          pod update
-          pod install
+          sh ../scripts/prepare.sh
       - name: Build
         run: |
-          cd scripts/ && source para.sh && cd ../
-
-          flutter build ipa --release --no-codesign
-
-          sh scripts/reid.sh
-          sh scripts/zip.sh ci
-          find -f build/
-      #    sh scripts/zip.sh $version
-      #    sh scripts/dsym.sh
+          cd scripts/
+          sh build_ipa.sh
+          sh pack_ipa.sh ci
         
       # Deploy artifacts
       - name: Upload a Build Artifact
@@ -48,6 +39,7 @@ jobs:
           # Artifact name
           name: 'ios' # optional, default is artifact
           # A file, directory or wildcard pattern that describes what to upload
+          # TODO: appropriate name
           path: 'build/ios/ci/feh_ci.ipa'
   # macos-build:
   #   runs-on: macos-latest

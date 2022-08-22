@@ -37,7 +37,8 @@ jobs:
 
           sh scripts/reid.sh
           sh scripts/zip.sh $version
-          sh scripts/dsym.sh
+          find -f build/
+      #    sh scripts/dsym.sh
         
       # Deploy artifacts
       # - name: Upload a Build Artifact

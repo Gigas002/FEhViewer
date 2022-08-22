@@ -35,8 +35,6 @@ jobs:
 
           flutter build ipa --release --no-codesign
 
-        # Following commands fails to execute, so unable to deploy through CI. Fixable?
-
           sh scripts/reid.sh
           sh scripts/zip.sh $version
           sh scripts/dsym.sh

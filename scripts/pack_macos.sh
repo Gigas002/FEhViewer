@@ -7,15 +7,14 @@ source para.sh
 
 macos_archiver_path="${scripts_path}/../build/macos/Build/Products/Release/fehviewer.app"
 macos_build_path="$scripts_path/../build/macos"
-
-dmg(){
-  echo "hdiutil create -fs HFS+ -srcfolder $version -volname $2 $3.dmg"
-  hdiutil create -fs HFS+ -srcfolder "$version" -volname "$2" "$3.dmg"
-}
-
 macos_temp_dir="macos_temp"
 macos_temp_file_name="feh_$version"
 macos_temp_path="$macos_build_path/$macos_temp_dir";
+
+dmg(){
+  echo "hdiutil create -fs HFS+ -srcfolder $macos_temp_path -volname $2 $3.dmg"
+  hdiutil create -fs HFS+ -srcfolder "$macos_temp_path" -volname "$2" "$3.dmg"
+}
 
 bin_dir="$macos_build_path/fehviewer";
 

@@ -28,9 +28,8 @@ jobs:
           sh ../scripts/prepare.sh
       - name: Build
         run: |
-          cd scripts/ && source para.sh && cd ../
           sh scripts/build_ipa.sh
-          sh scripts/pack_ipa.sh ci
+          cd scripts/ && sh pack_ipa.sh ci
         
       # Deploy artifacts
       - name: Upload a Build Artifact

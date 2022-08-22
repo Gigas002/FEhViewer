@@ -1,17 +1,12 @@
 #!/bin/sh
 # shellcheck disable=SC2034
 
+source para.sh
+
 ios_archiver_path="$scripts_path/../build/ios/archive/fehviewer.xcarchive/Products/Applications/FEhViewer.app"
 ipa_plist_path="$ios_archiver_path/Info.plist"
 release_bundle_identifier='cn.honjow.fehv'
 ios_build_path="$scripts_path/../build/ios"
-
-echo $version
-if [ $version -eq 0 ];
-then
-    echo "version empty"
-    exit
-fi
 
 # reid.sh
 
@@ -23,11 +18,10 @@ plist_key="CFBundleIdentifier"
 
 # TODO: $version
 ipa_name="feh_$1.ipa"
+output_version_dir="$ios_build_path/$1";
+
 ipa_temp_dir="$ios_build_path/temp";
 ipa_payload_dir="$ios_build_path/temp/Payload";
-
-output_version_dir="$ios_build_path/$version";
-
 ipa_path="$ipa_temp_dir/$ipa_name"
 
 rm -rf $ipa_temp_dir

@@ -17,7 +17,7 @@ jobs:
         uses: subosito/flutter-action@v2.6.1
         with:
         # Beta is required for --no-codesign on iOS build to work properly. Can be commented after flutter 3.1.0 release, see https://github.com/flutter/flutter/issues/101765
-          channel: master # optional, default is stable
+          channel: beta # optional, default is stable
 
       - name: Prepare
         run: |

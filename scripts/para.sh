@@ -2,7 +2,7 @@ export scripts_path=`pwd`
 export release_bundle_identifier='cn.honjow.fehv'
 export dev_bundle_identifier='dev2.cn.honjow.fehv'
 
-export pub_output_path="$HOME/Public/fehv";
+# export pub_output_path="$HOME/Public/fehv";
 
 export macos_archiver_path="${scripts_path}/../build/macos/Build/Products/Release/fehviewer.app";
 
@@ -15,4 +15,3 @@ export apk_build_path="${scripts_path}/../build/app/outputs/apk/release/";
 export apk_build_path_universal="${scripts_path}/../build/app/outputs/apk/releaseUniversal/";
 
 export version=`perl version.pl`
-

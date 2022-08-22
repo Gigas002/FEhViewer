@@ -1,21 +1,17 @@
 #!/bin/sh
 # shellcheck disable=SC2034
 
+source para.sh
+
 # dmg.sh
 
 macos_archiver_path="${scripts_path}/../build/macos/Build/Products/Release/fehviewer.app"
 macos_build_path="$scripts_path/../build/macos"
 
 dmg(){
-  echo "hdiutil create -fs HFS+ -srcfolder $1 -volname $2 $3.dmg"
-  hdiutil create -fs HFS+ -srcfolder "$1" -volname "$2" "$3.dmg"
+  echo "hdiutil create -fs HFS+ -srcfolder $version -volname $2 $3.dmg"
+  hdiutil create -fs HFS+ -srcfolder "$version" -volname "$2" "$3.dmg"
 }
-
-if [ $version -eq 0 ];
-then
-    echo "version empty"
-    exit
-fi
 
 macos_temp_dir="macos_temp"
 macos_temp_file_name="feh_$version"

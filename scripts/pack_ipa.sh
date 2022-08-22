@@ -33,7 +33,8 @@ mkdir $output_version_dir
 cp -r $ios_archiver_path $ipa_payload_dir
 
 cd $ipa_temp_dir || exit
-# zip -qro $ipa_path "Payload" && mv $ipa_path $output_version_dir
+
+# Pack release
 7z a $ipa_path "Payload" && mv $ipa_path $output_version_dir
 
 # dsym.sh

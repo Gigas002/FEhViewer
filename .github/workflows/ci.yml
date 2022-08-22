@@ -7,40 +7,7 @@ on:
     branches: ["ci-test-2"]
 
 jobs:
-  ios-build:
-    runs-on: macos-latest
-
-    steps:
-      - uses: actions/checkout@v3.0.2
-
-      - name: Install flutter
-        uses: subosito/flutter-action@v2.6.1
-        with:
-        # Beta is required for --no-codesign on iOS build to work properly. Can be commented after flutter 3.1.0 release, see https://github.com/flutter/flutter/issues/101765
-          channel: beta # optional, default is stable
-
-      - name: Prepare
-        run: |
-          rm lib/config/config.dart
-          mv lib/config/config.dart.sample lib/config/config.dart
-
-          cd ios/
-          sh ../scripts/prepare.sh
-      - name: Build
-        run: |
-          sh scripts/build_ipa.sh
-          cd scripts/ && sh pack_ipa.sh ci
-        
-      # Deploy artifacts
-      - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v3.1.0
-        with:
-          # Artifact name
-          name: 'ios' # optional, default is artifact
-          # A file, directory or wildcard pattern that describes what to upload
-          # TODO: appropriate name
-          path: 'build/ios/ci/feh_ci.ipa'
-  # macos-build:
+  # ios-build:
   #   runs-on: macos-latest
 
   #   steps:
@@ -48,34 +15,60 @@ jobs:
 
   #     - name: Install flutter
   #       uses: subosito/flutter-action@v2.6.1
+  #       with:
+  #       # Beta is required for --no-codesign on iOS build to work properly. Can be commented after flutter 3.1.0 release, see https://github.com/flutter/flutter/issues/101765
+  #         channel: beta # optional, default is stable
 
   #     - name: Prepare
   #       run: |
   #         rm lib/config/config.dart
   #         mv lib/config/config.dart.sample lib/config/config.dart
 
-  #         cd macos/
-  #         flutter clean
-  #         flutter pub get
-  #         pod update
-  #         pod install
+  #         cd ios/
+  #         sh ../scripts/prepare.sh
   #     - name: Build
   #       run: |
-  #         cd scripts/ && source para.sh && cd ../
-
-  #         flutter build macos --release
-  #         sh scripts/dmg.sh $version
-
-  #         sh scripts/pack_macos.sh
+  #         sh scripts/build_ipa.sh
+  #         cd scripts/ && sh pack_ipa.sh ci
         
   #     # Deploy artifacts
   #     - name: Upload a Build Artifact
   #       uses: actions/upload-artifact@v3.1.0
   #       with:
   #         # Artifact name
-  #         name: 'macos' # optional, default is artifact
+  #         name: 'ios' # optional, default is artifact
   #         # A file, directory or wildcard pattern that describes what to upload
-  #         path: 'build/macos.zip'
+  #         # TODO: appropriate name
+  #         path: 'build/ios/ci/feh_ci.ipa'
+  macos-build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v3.0.2
+
+      - name: Install flutter
+        uses: subosito/flutter-action@v2.6.1
+
+      - name: Prepare
+        run: |
+          rm lib/config/config.dart
+          mv lib/config/config.dart.sample lib/config/config.dart
+
+          cd macos/
+          sh ../scripts/prepare.sh
+      - name: Build
+        run: |
+          sh scripts/build_macos.sh
+          cd scripts/ && sh pack_macos.sh ci
+        
+      # Deploy artifacts
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          # Artifact name
+          name: 'macos' # optional, default is artifact
+          # A file, directory or wildcard pattern that describes what to upload
+          path: 'build/macos.zip'
   # windows-build:
   #   runs-on: windows-latest
 

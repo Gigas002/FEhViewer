@@ -40,37 +40,8 @@ jobs:
   #         # A file, directory or wildcard pattern that describes what to upload
   #         # TODO: appropriate name
   #         path: 'build/ios/ci/feh_ci.ipa'
-  macos-build:
-    runs-on: macos-latest
-
-    steps:
-      - uses: actions/checkout@v3.0.2
-
-      - name: Install flutter
-        uses: subosito/flutter-action@v2.6.1
-
-      - name: Prepare
-        run: |
-          rm lib/config/config.dart
-          mv lib/config/config.dart.sample lib/config/config.dart
-
-          cd macos/
-          sh ../scripts/prepare.sh
-      - name: Build
-        run: |
-          sh scripts/build_macos.sh
-          cd scripts/ && sh pack_macos.sh ci
-        
-      # Deploy artifacts
-      - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v3.1.0
-        with:
-          # Artifact name
-          name: 'macos' # optional, default is artifact
-          # A file, directory or wildcard pattern that describes what to upload
-          path: 'build/macos.zip'
-  # windows-build:
-  #   runs-on: windows-latest
+  # macos-build:
+  #   runs-on: macos-latest
 
   #   steps:
   #     - uses: actions/checkout@v3.0.2
@@ -82,19 +53,48 @@ jobs:
   #       run: |
   #         rm lib/config/config.dart
   #         mv lib/config/config.dart.sample lib/config/config.dart
+
+  #         cd macos/
+  #         sh ../scripts/prepare.sh
   #     - name: Build
   #       run: |
-  #         scripts/build_win.bat
-  #         scripts/pack_win.bat
+  #         sh scripts/build_macos.sh
+  #         cd scripts/ && sh pack_macos.sh ci
         
   #     # Deploy artifacts
   #     - name: Upload a Build Artifact
   #       uses: actions/upload-artifact@v3.1.0
   #       with:
   #         # Artifact name
-  #         name: 'windows' # optional, default is artifact
+  #         name: 'macos' # optional, default is artifact
   #         # A file, directory or wildcard pattern that describes what to upload
-  #         path: 'build/windows.zip'
+  #         path: 'build/macos.zip'
+  windows-build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3.0.2
+
+      - name: Install flutter
+        uses: subosito/flutter-action@v2.6.1
+
+      - name: Prepare
+        run: |
+          rm lib/config/config.dart
+          mv lib/config/config.dart.sample lib/config/config.dart
+      - name: Build
+        run: |
+          scripts/build_win.bat
+          scripts/pack_win.bat
+        
+      # Deploy artifacts
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          # Artifact name
+          name: 'windows' # optional, default is artifact
+          # A file, directory or wildcard pattern that describes what to upload
+          path: 'build/windows.zip'
   # android-build:
   #   runs-on: ubuntu-latest
 

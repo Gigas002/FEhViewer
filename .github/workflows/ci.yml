@@ -84,6 +84,7 @@ jobs:
           mv lib/config/config.dart.sample lib/config/config.dart
       - name: Build
         run: |
+          git config --global core.longpaths true
           scripts/build_win.bat
           scripts/pack_win.bat
         

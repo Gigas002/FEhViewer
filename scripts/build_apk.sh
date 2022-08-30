@@ -5,9 +5,10 @@
 export scripts_path=`pwd`
 
 apk_build_path="$scripts_path/../build/app/outputs/flutter-apk/";
-apk_build_path_universal="$scripts_path/../build/app/outputs/flutter-apk/releaseUniversal/";
+apk_build_tmp="$scripts_path/../build/app/outputs/tmp/";
 
 flutter build apk
-cp -R $apk_build_path $apk_build_path_universal
+mkdir $apk_build_tmp
+cp -R $apk_build_path $apk_build_tmp
 flutter build apk --split-per-abi
-cp $apk_build_path_universal/*.apk $apk_build_path/*
+cp -i $apk_build_tmp/*.apk $apk_build_path/*

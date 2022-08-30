@@ -1,6 +1,8 @@
 #!/bin/bash
 
-source para.sh
+#source para.sh
+
+export scripts_path=`pwd`
 
 apk_build_path="$scripts_path/../build/app/outputs/flutter-apk/";
 apk_build_path_universal="$scripts_path/../build/app/outputs/flutter-apk/releaseUniversal/";

@@ -28,10 +28,14 @@ if (keystorePropertiesFile.exists()) {
         keystoreProperties.load(reader)
     }
 }
-def _keyAlias = keystoreProperties.getProperty("keyAlias")
-def _keyPassword = keystoreProperties.getProperty("keyPassword")
-def _storeFile = keystoreProperties.getProperty("storeFile")
-def _storePassword = keystoreProperties.getProperty("storePassword")
+// def _keyAlias = keystoreProperties.getProperty("keyAlias")
+// def _keyPassword = keystoreProperties.getProperty("keyPassword")
+// def _storeFile = keystoreProperties.getProperty("storeFile")
+// def _storePassword = keystoreProperties.getProperty("storePassword")
+def _keyAlias = "keyAlias"
+def _keyPassword = "keyPassword"
+// def _storeFile = keystoreProperties.getProperty("storeFile")
+def _storePassword = "storePassword"
 
 
 apply plugin: 'com.android.application'

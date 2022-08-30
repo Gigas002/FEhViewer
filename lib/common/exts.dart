@@ -1,7 +1,10 @@
 import 'package:fehviewer/common/service/dns_service.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
+
+import '../const/const.dart';
 
 extension EhString on String {
   String toRealUrl() {
@@ -36,7 +39,11 @@ extension EhString on String {
     return this;
   }
 
-  String get dfUrl {
+  String get handleUrl {
+    return _domainFrontingUrl._handleThumbUrlToEh;
+  }
+
+  String get _domainFrontingUrl {
     final DnsService dnsService = Get.find();
     final df = dnsService.enableDomainFronting;
     final String host = Uri.parse(this).host;
@@ -48,6 +55,25 @@ extension EhString on String {
       final String realUrl = replaceFirst(host, realHost);
       logger.v('realUrl: $realUrl');
       return realUrl;
+    }
+
+    return this;
+  }
+
+  String get _handleThumbUrlResolution {
+    if (startsWith(EHConst.URL_PREFIX_THUMB_E) ||
+        startsWith(EHConst.URL_PREFIX_THUMB_EX)) {}
+
+    return this;
+  }
+
+  String get _handleThumbUrlToEh {
+    final EhConfigService _ehConfigService = Get.find();
+
+    if (startsWith(EHConst.URL_PREFIX_THUMB_EX) &&
+        _ehConfigService.redirectThumbLink) {
+      return replaceFirst(
+          EHConst.URL_PREFIX_THUMB_EX, EHConst.URL_PREFIX_THUMB_E);
     }
 
     return this;

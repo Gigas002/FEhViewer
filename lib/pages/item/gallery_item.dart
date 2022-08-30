@@ -196,8 +196,9 @@ class GalleryItemWidget extends StatelessWidget {
 
                             // 上传时间
                             Expanded(
-                                child: _PostTime(
+                                child: PostTime(
                               postTime: galleryProvider.postTime,
+                              expunged: galleryProvider.expunged,
                             )),
                           ],
                         ),
@@ -305,7 +306,8 @@ class _CoverImage extends StatelessWidget {
         return getImageBlureFittedBox();
       } else {
         return Container(
-          color: CupertinoColors.systemGrey5,
+          color: CupertinoDynamicColor.resolve(
+              CupertinoColors.systemGrey5, context),
         );
       }
     }
@@ -501,20 +503,6 @@ class _Rating extends StatelessWidget {
   }
 }
 
-class _PostTime extends StatelessWidget {
-  const _PostTime({Key? key, this.postTime}) : super(key: key);
-  final String? postTime;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      postTime ?? '',
-      textAlign: TextAlign.right,
-      style: const TextStyle(fontSize: 12, color: CupertinoColors.systemGrey),
-    ).paddingOnly(left: 8);
-  }
-}
-
 class _Category extends StatelessWidget {
   const _Category({Key? key, required this.category}) : super(key: key);
   final String? category;
@@ -598,7 +586,7 @@ class TagBox extends StatelessWidget {
       List<SimpleTag>? _simpleTags =
           getLimitSimpleTags(simpleTags, _ehConfigService.listViewTagLimit);
 
-      if (_simpleTags == null || (_simpleTags.isEmpty ?? true)) {
+      if (_simpleTags == null || _simpleTags.isEmpty) {
         return const SizedBox.shrink();
       }
 
@@ -655,7 +643,7 @@ class CoverImg extends StatelessWidget {
           width: width,
           height: height,
           // httpHeaders: _httpHeaders,
-          imageUrl: imgUrl.dfUrl,
+          imageUrl: imgUrl.handleUrl,
           fit: fit, //
         );
       } else {

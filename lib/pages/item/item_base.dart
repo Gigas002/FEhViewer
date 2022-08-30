@@ -84,7 +84,7 @@ class TagWaterfallFlowViewBox extends StatelessWidget {
               crossAxisSpacing: 4.0,
               mainAxisSpacing: 4.0,
             ),
-            itemCount: _simpleTags.length ?? 0,
+            itemCount: _simpleTags.length,
             itemBuilder: (BuildContext context, int index) {
               return Obx(
                 () {
@@ -142,5 +142,32 @@ List<SimpleTag>? getLimitSimpleTags(List<SimpleTag>? simpleTags, int limit) {
     return simpleTags?.take(limit).toList();
   } else {
     return simpleTags;
+  }
+}
+
+class PostTime extends StatelessWidget {
+  const PostTime({
+    Key? key,
+    this.postTime,
+    this.expunged = false,
+    this.fontSize = 12,
+  }) : super(key: key);
+  final String? postTime;
+  final bool? expunged;
+  final double? fontSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      postTime ?? '',
+      textAlign: TextAlign.right,
+      style: TextStyle(
+        fontSize: fontSize,
+        color: CupertinoColors.systemGrey,
+        decoration: (expunged ?? false)
+            ? TextDecoration.lineThrough
+            : TextDecoration.none,
+      ),
+    );
   }
 }

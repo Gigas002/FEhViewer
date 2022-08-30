@@ -101,6 +101,8 @@ LoadStateChanged defLoadStateChanged = (ExtendedImageState state) {
   }
 };
 
+const double kThresholdTabletWidth = 700.0;
+
 const AdvanceSearch kDefAdvanceSearch = AdvanceSearch(
   searchGalleryName: true,
   searchGalleryTags: true,
@@ -253,9 +255,12 @@ class EHConst {
   static const String EH_TORRENT_URL = 'https://ehtracker.org/get';
   static const String EX_TORRENT_URL = 'https://exhentai.org/torrent';
 
+  static const String URL_PREFIX_THUMB_E = 'https://ehgt.org/';
+  static const String URL_PREFIX_THUMB_EX = 'https://exhentai.org/t/';
+
   static const String DB_NAME = 'feh.db';
 
-  static const int exMaxConnectionsPerHost = 4;
+  static const int exMaxConnectionsPerHost = 3;
 
   static String getBaseSite([bool isEx = false]) =>
       isEx ? EX_BASE_URL : EH_BASE_URL;
@@ -350,7 +355,7 @@ class EHConst {
     'misc': '杂项',
     'uploader': '上传者',
     'other': '其他',
-    'mixed': '混杂',
+    'mixed': '混合',
     'cosplayer': '扮演者',
     'temp': '临时',
   };

@@ -3,6 +3,7 @@ import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/base_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/storages.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/gallery/view/sliver/gallery_page_sliver.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
@@ -22,6 +23,7 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
 import '../enum.dart';
+import 'controller_tag_service.dart';
 import 'locale_service.dart';
 
 class EhConfigService extends ProfileService {
@@ -40,7 +42,7 @@ class EhConfigService extends ProfileService {
   RxString lastFavcat = '0'.obs;
   RxBool isFavPicker = false.obs;
   RxBool isPureDarkTheme = false.obs;
-  RxBool isClipboardLink = false.obs;
+  RxBool isClipboardLink = true.obs;
   RxBool commentTrans = false.obs;
   RxBool blurredInRecentTasks = true.obs;
   Rx<TagIntroImgLv> tagIntroImgLv = TagIntroImgLv.nonh.obs;
@@ -204,7 +206,7 @@ class EhConfigService extends ProfileService {
   set blurringOfCoverBackground(bool val) =>
       _blurringOfCoverBackground.value = val;
 
-  static const _kAvatarType = AvatarType.boringAvatar;
+  static const _kAvatarType = AvatarType.textAvatar;
   final _avatarType = _kAvatarType.obs;
   AvatarType get avatarType => _avatarType.value;
   set avatarType(AvatarType val) => _avatarType.value = val;
@@ -218,9 +220,18 @@ class EhConfigService extends ProfileService {
   int get listViewTagLimit => _listViewTagLimit.value;
   set listViewTagLimit(int val) => _listViewTagLimit.value = val;
 
+  final _redirectThumbLink = true.obs;
+  bool get redirectThumbLink => _redirectThumbLink.value;
+  set redirectThumbLink(bool val) => _redirectThumbLink.value = val;
+
   @override
   void onInit() {
     super.onInit();
+
+    redirectThumbLink = ehConfig.redirectThumbLink ?? redirectThumbLink;
+    everProfile<bool>(_redirectThumbLink, (value) {
+      ehConfig = ehConfig.copyWith(redirectThumbLink: value);
+    });
 
     listViewTagLimit = ehConfig.listViewTagLimit ?? listViewTagLimit;
     everProfile<int>(_listViewTagLimit, (value) {
@@ -334,26 +345,15 @@ class EhConfigService extends ProfileService {
 
     isSiteEx.value = ehConfig.siteEx ?? isSiteEx.value;
     // 初始化
-    ehDioConfig = isSiteEx.value ? exDioConfig : ehDioConfig;
+    switchGlobalDioConfig(isSiteEx.value);
     everProfile(isSiteEx, (value) {
       logger.d('everProfile isSiteEx');
       ehConfig = ehConfig.copyWith(siteEx: value as bool);
-      if (value) {
-        // 切换ex后
-        Global.initImageHttpClient(
-            maxConnectionsPerHost: EHConst.exMaxConnectionsPerHost);
-        ehDioConfig
-          ..baseUrl = exDioConfig.baseUrl
-          ..receiveTimeout = exDioConfig.receiveTimeout
-          ..connectTimeout = exDioConfig.connectTimeout
-          ..maxConnectionsPerHost = exDioConfig.maxConnectionsPerHost;
-      } else {
-        ehDioConfig
-          ..baseUrl = EHConst.EH_BASE_URL
-          ..receiveTimeout = ehDioConfig.receiveTimeout
-          ..connectTimeout = ehDioConfig.connectTimeout
-          ..maxConnectionsPerHost = null;
-      }
+      switchGlobalDioConfig(value);
+      // 切换ex后
+      Global.initImageHttpClient(
+        maxConnectionsPerHost: globalDioConfig.maxConnectionsPerHost,
+      );
     });
 
     isFavLongTap.value = ehConfig.favLongTap ?? isFavLongTap.value;
@@ -722,26 +722,50 @@ class EhConfigService extends ProfileService {
       logger.d('Clipboard: ' + _text);
     }
     final RegExp _reg =
-        RegExp(r'https?://e[-|x]hentai.org/g/\d+/[0-9a-f]{10}/?');
+        RegExp(r'https?://e[-|x]hentai.org/g/(\d+)/([0-9a-f]{10})/?');
     final RegExpMatch? _mach = _reg.firstMatch(_text);
+    final gid = _mach?.group(1) ?? '';
 
     if (_mach == null && (_mach?.group(0)?.isEmpty ?? true)) {
       return;
     }
 
-    if (_currentRouteIsGalleryPage && _lastClipboardLink == _mach?.group(0)) {
-      logger.v('剪贴板链接为当前展示的画廊 返回');
+    if (pageCtrlTag == gid) {
+      logger.d('剪贴板链接为当前展示的画廊 返回');
       return;
     }
+
+    // if (_currentRouteIsGalleryPage && _lastClipboardLink == _mach?.group(0)) {
+    //   logger.d('剪贴板链接为当前展示的画廊 返回');
+    //   return;
+    // }
 
     logger.d('${_mach?.group(0)} ');
     _lastClipboardLink = _mach?.group(0) ?? '';
     if (_lastClipboardLink.isNotEmpty) {
-      _showClipboardLinkDialog(
+      // _showClipboardLinkDialog(
+      //   _lastClipboardLink,
+      //   replace: _replace,
+      // );
+
+      _showClipboardLinkToast(
         _lastClipboardLink,
         replace: _replace,
       );
     }
+  }
+
+  Future<void> _showClipboardLinkToast(
+    String url, {
+    bool replace = false,
+  }) async {
+    showActionToast(
+      url,
+      icon: CupertinoIcons.link,
+      onPressed: () {
+        NavigatorUtil.goGalleryPage(url: url, forceReplace: replace);
+      },
+    );
   }
 
   Future<void> _showClipboardLinkDialog(

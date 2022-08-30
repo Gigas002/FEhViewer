@@ -64,7 +64,7 @@ android {
     }
     signingConfigs {
         debug {
-            storeFile file(_storeFile)
+            // storeFile file(_storeFile)
             storePassword _storePassword
             keyAlias _keyAlias
             keyPassword _keyPassword
@@ -72,7 +72,7 @@ android {
             v2SigningEnabled true
         }
         release {
-            storeFile file(_storeFile)
+            // storeFile file(_storeFile)
             storePassword _storePassword
             keyAlias _keyAlias
             keyPassword _keyPassword

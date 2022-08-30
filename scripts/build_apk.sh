@@ -1,5 +1,6 @@
 #!/bin/sh
 
+ls -a
 source para.sh
 echo $scripts_path
 
